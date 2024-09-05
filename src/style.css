@@ -1,1 +1,6 @@
 @import "reset.css";
+
+.toDoElem {
+  border: 12px solid black;
+  color: red;
+}
