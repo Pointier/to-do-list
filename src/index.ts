@@ -1,5 +1,7 @@
 import "./style.css";
 import { ToDo, Priority, ChecklistItem } from "./module/to-do";
+import { Project } from "./module/project";
+
 const testDate = new Date("December 17, 1995 03:24:00");
 const checklist: ChecklistItem[] = [
   { description: "voili voilu", completed: false },
@@ -13,9 +15,52 @@ const toDo = new ToDo(
   "some notes",
   checklist,
 );
-const testDiv = document.createElement("div");
-testDiv.innerText = toDo.description;
-document.body.appendChild(testDiv);
+
+const defaultProject = new Project("default", [toDo]);
+
+const buttonTest = document.createElement("button");
+buttonTest.innerText = "buttonTest";
+buttonTest.addEventListener("click", () => {
+  formToDo();
+});
+
+document.body.appendChild(buttonTest);
+
+function formToDo() {
+  const form = document.createElement("div");
+  form.innerText = "Data needed to create a new form";
+
+  const title = document.createElement("input");
+  title.type = "text";
+
+  const description = document.createElement("input");
+  description.type = "text";
+
+  const priorityDropdown = document.createElement("select");
+
+  const priorities = ["Low", "Medium", "High"];
+
+  priorities.forEach((prio) => {
+    const option = document.createElement("option");
+    option.value = prio;
+    option.innerText = prio;
+    priorityDropdown.appendChild(option);
+  });
+  let selectedPriority = "";
+  priorityDropdown.addEventListener("change", (event) => {
+    selectedPriority = (event.target as HTMLSelectElement).value;
+  });
+
+  form.appendChild(title);
+  form.appendChild(description);
+  form.appendChild(priorityDropdown);
+
+  document.body.appendChild(form);
+
+  const valid = document.createElement("button");
+  valid.innerText = "ok";
+  valid.addEventListener("click", () => {});
+}
 
 function displayToDo(list: ToDo, appendTo: Element) {
   const listElem = document.createElement("div");
@@ -54,4 +99,13 @@ function displayToDo(list: ToDo, appendTo: Element) {
   appendTo.appendChild(listElem);
 }
 
-displayToDo(toDo, document.body);
+function displayProject(project: Project, appendTo: Element) {
+  const projectElem = document.createElement("div");
+  projectElem.innerText = project.name;
+
+  appendTo.appendChild(projectElem);
+
+  displayToDo(toDo, projectElem);
+}
+
+displayProject(defaultProject, document.body);
